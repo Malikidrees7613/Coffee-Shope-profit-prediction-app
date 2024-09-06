@@ -2,11 +2,11 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 from model_loader import load_trained_model, make_prediction
 
 
-MODEL_PATH = 'Coffee shop prediction Model.pkl'
-model = load_trained_model(MODEL_PATH)
+model = joblib.load("Coffee shope prediction Model.pkl")
 
 st.title("Profit Prediction App")
 

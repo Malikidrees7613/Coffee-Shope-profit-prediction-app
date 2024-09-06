@@ -1,9 +1,9 @@
 import pandas as pd
 import joblib 
 
-def load_trained_model(model_path):
-    model = joblib.load(model_path)
-    print(f"Model loaded successfully from {model_path}")
+def load_trained_model():
+    model = joblib.load("Coffee shope prediction Model.pkl")
+    print(f"Model loaded successfully")
     return model
 
 def make_prediction(model, data):
