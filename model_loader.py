@@ -2,7 +2,7 @@ import pandas as pd
 import joblib 
 
 def load_trained_model():
-    model = joblib.load("Coffee shope prediction Model.pkl")
+    model = joblib.load("Coffee shope prediction Model.keras")
     print(f"Model loaded successfully")
     return model
 
