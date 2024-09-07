@@ -6,7 +6,7 @@ import joblib
 from model_loader import load_trained_model, make_prediction
 
 
-model = joblib.load("Coffee shope prediction Model.keras")
+model = joblib.load("Coffee shope prediction Model2.h5")
 
 st.title("Profit Prediction App")
 
