@@ -1,18 +1,50 @@
 import streamlit as st
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import joblib
+
+model= joblib.load('K-Nearest Neighbors.pkl')
+
+with open('accuracy.txt','r') as file:
+    accuracy= file.read()
+st.title("Model Accuracy and Real-Time Prediction")
+st.write(f"Model {accuracy}")
+
+st.header("Real-Time Prediction")
+
+test_data = pd.read_csv('mobile_price_range_data.csv')
+
+X_test = test_data.iloc[:, :-1]
+y_test = test_data.iloc[:, -1]
+
+input_data = []
+for col in X_test.columns:
+    input_value = st.number_input(f"Input for {col}", value=0.0)
+    input_data.append(input_value)
+
+input_df = pd.DataFrame([input_data], columns=X_test.columns)
+
+if st.button("Predict"):
+    prediction = model.predict(input_df)
+    st.write(f"Prediction: {prediction[0]}")
+
+st.header("Accuracy Plot")
+accuracy_value = float(accuracy.split(': ')[1])
+st.bar_chart([accuracy_value])
+
+
+
+
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 import tensorflow as tf
+import model_loader
 
-# Load the trained model
+
 model = tf.keras.models.load_model('/workspaces/Coffee-shope-profit-prediction-app/Coffee shope prediction Model2.h5')
-
-# Function to make prediction (this should be defined somewhere in your code)
-def make_prediction(model, input_data):
-    # Assume your model expects input data in a specific format and returns predictions
-    # Replace this with your actual prediction logic
-    predictions = model.predict(input_data)
-    return predictions
 
 st.title("Profit Prediction App")
 
@@ -26,23 +58,23 @@ units_sold = st.number_input('Units Sold', min_value=0, step=1)
 total_sales = st.number_input('Total Sales', min_value=0.0, step=0.1)
 
 if st.button('Predict'):
+    
     input_data = pd.DataFrame({
         'Unit Price': [unit_price],
         'Units Sold': [units_sold],
         'Total Sales': [total_sales]
     })
     
-    # Ensure input_data matches the expected format of your model
     predicted_profit = make_prediction(model, input_data)
     
-    st.success(f"Predicted Profit: ${predicted_profit[0][0]:.2f}")
+    st.success(f"Predicted Profit: ${predicted_profit[0]:.2f}")
 
     st.subheader("Visualizations")
 
     # Scatter Plot of Units Sold vs Predicted Profit
     st.write("### Scatter Plot: Units Sold vs Predicted Profit")
     fig, ax = plt.subplots()
-    sns.scatterplot(x=[units_sold], y=predicted_profit.flatten(), ax=ax)
+    sns.scatterplot(x=[units_sold], y=predicted_profit, ax=ax)
     ax.set_xlabel("Units Sold")
     ax.set_ylabel("Predicted Profit")
     ax.set_title("Units Sold vs Predicted Profit")
@@ -51,7 +83,7 @@ if st.button('Predict'):
     # Distribution Plot of Predicted Profits
     st.write("### Distribution Plot: Predicted Profit")
     fig, ax = plt.subplots()
-    sns.histplot(predicted_profit.flatten(), bins=10, kde=True, ax=ax)
+    sns.histplot(predicted_profit, bins=10, kde=True, ax=ax)
     ax.set_xlabel("Predicted Profit")
     ax.set_title("Distribution of Predicted Profits")
     st.pyplot(fig)
@@ -60,7 +92,7 @@ if st.button('Predict'):
     st.write("### Correlation Heatmap")
     fig, ax = plt.subplots()
     data = input_data.copy()
-    data['Predicted Profit'] = predicted_profit.flatten()
+    data['Predicted Profit'] = predicted_profit
     sns.heatmap(data.corr(), annot=True, cmap='coolwarm', ax=ax)
     ax.set_title("Correlation Heatmap of Input Features and Predicted Profit")
     st.pyplot(fig)

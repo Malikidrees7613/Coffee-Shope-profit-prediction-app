@@ -18,5 +18,5 @@ y_pred = model.predict(X_test_scaled)
 
 mse = mean_squared_error(y_test_scaled,y_pred)
 print(mse)
-with open('accuracy.txt','w') as file:
-    file.write(f'Accuracy: {mse}')
+#with open('accuracy.txt','w') as file:
+    #file.write(f'Accuracy: {mse}')
