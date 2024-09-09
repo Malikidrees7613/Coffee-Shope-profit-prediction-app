@@ -5,7 +5,7 @@ import seaborn as sns
 import tensorflow as tf
 
 # Load the trained model
-model = tf.keras.models.load_model('/workspaces/Coffee-shope-profit-prediction-app/Coffee shope prediction Model2.h5')
+model = tf.keras.models.load_model('Coffee shope prediction Model2.h5')
 
 # Function to make prediction (this should be defined somewhere in your code)
 def make_prediction(model, input_data):
